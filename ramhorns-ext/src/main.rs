@@ -1,5 +1,5 @@
 
-use ramhorns_derive_ext::Content;
+use ramhorns_derive::Content;
 use ramhorns_ext::Template;
 fn main() {
     let v1 = Sa {

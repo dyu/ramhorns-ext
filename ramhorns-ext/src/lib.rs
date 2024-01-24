@@ -94,7 +94,7 @@ pub use error::Error;
 pub use template::{Section, Template};
 
 #[cfg(feature = "export_derive")]
-pub use ramhorns_derive_ext::Content;
+pub use ramhorns_derive::Content;
 
 /// Aggregator for [`Template`s](./struct.Template.html), that allows them to
 /// be loaded from the file system and use partials: `{{>partial}}`
