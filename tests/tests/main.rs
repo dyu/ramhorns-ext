@@ -240,6 +240,203 @@ fn can_render_sections_from_bool() {
 }
 
 #[test]
+fn can_render_conditions_from_bool() {
+    #[derive(Content)]
+    struct Conditional {
+        secret: bool,
+    }
+
+    let tpl = Template::new("Hello!{{?secret}} This is a secret!{{/secret}}").unwrap();
+
+    let show = tpl.render(&Conditional { secret: true });
+    let hide = tpl.render(&Conditional { secret: false });
+
+    assert_eq!(show, "Hello! This is a secret!");
+    assert_eq!(hide, "Hello!");
+}
+
+#[test]
+fn can_render_sections_from_int() {
+    #[derive(Content)]
+    struct Conditional {
+        secret: u32,
+    }
+
+    let tpl = Template::new("Hello!{{#secret}} This is a secret!{{/secret}}").unwrap();
+
+    let show = tpl.render(&Conditional { secret: 1 });
+    let hide = tpl.render(&Conditional { secret: 0 });
+
+    assert_eq!(show, "Hello! This is a secret!");
+    assert_eq!(hide, "Hello!");
+}
+
+#[test]
+fn can_render_conditions_from_int() {
+    #[derive(Content)]
+    struct Conditional {
+        secret: u32,
+    }
+
+    let tpl = Template::new("Hello!{{?secret}} This is a secret!{{/secret}}").unwrap();
+
+    let show = tpl.render(&Conditional { secret: 1 });
+    let hide = tpl.render(&Conditional { secret: 0 });
+
+    assert_eq!(show, "Hello! This is a secret!");
+    assert_eq!(hide, "Hello!");
+}
+
+#[test]
+fn can_render_conditions_from_string() {
+    #[derive(Content)]
+    struct Conditional {
+        secret: String,
+    }
+
+    let tpl = Template::new("Hello!{{?secret}} This is a secret!{{/secret}}").unwrap();
+
+    let show = tpl.render(&Conditional { secret: "hello".to_string() });
+    let hide = tpl.render(&Conditional { secret: "".to_string() });
+
+    assert_eq!(show, "Hello! This is a secret!");
+    assert_eq!(hide, "Hello!");
+}
+
+#[test]
+fn can_render_negations_from_string() {
+    #[derive(Content)]
+    struct Conditional {
+        secret: String,
+    }
+
+    let tpl = Template::new("Hello!{{^secret}} This is a secret!{{/secret}}").unwrap();
+
+    let hide = tpl.render(&Conditional { secret: "hello".to_string() });
+    let show = tpl.render(&Conditional { secret: "".to_string() });
+
+    assert_eq!(show, "Hello! This is a secret!");
+    assert_eq!(hide, "Hello!");
+}
+
+#[test]
+fn can_render_negations_from_int() {
+    #[derive(Content)]
+    struct Conditional {
+        secret: u32,
+    }
+
+    let tpl = Template::new("Hello!{{^secret}} This is a secret!{{/secret}}").unwrap();
+
+    let hide = tpl.render(&Conditional { secret: 1 });
+    let show = tpl.render(&Conditional { secret: 0 });
+
+    assert_eq!(show, "Hello! This is a secret!");
+    assert_eq!(hide, "Hello!");
+}
+
+/*
+#[test]
+fn can_render_sections_from_vec() {
+    #[derive(Content)]
+    struct Article {
+        title: String,
+    }
+
+    #[derive(Content)]
+    struct Conditional {
+        secret: Vec<Article>,
+    }
+
+    let tpl = Template::new("Hello!{{#secret}} This is a secret!{{/length}}").unwrap();
+
+    let show = tpl.render(&Conditional {
+        secret: vec![
+          Article {
+              title: "How is Ramhorns this fast?".into(),
+          },
+          Article {
+              title: "Look at that cat pic!".into(),
+          },
+          Article {
+              title: "Hello World!".into(),
+          },
+        ]
+    });
+    let hide = tpl.render(&Conditional { secret: vec![] });
+
+    assert_eq!(show, "Hello! This is a secret!");
+    assert_eq!(hide, "Hello!");
+}
+*/
+
+#[test]
+fn can_render_conditions_from_vec() {
+  #[derive(Content)]
+  struct Article {
+      title: String,
+  }
+
+  #[derive(Content)]
+  struct Conditional {
+      secret: Vec<Article>,
+  }
+
+  let tpl = Template::new("Hello!{{?secret}} This is a secret!{{/secret}}").unwrap();
+
+  let show = tpl.render(&Conditional {
+      secret: vec![
+        Article {
+            title: "How is Ramhorns this fast?".into(),
+        },
+        Article {
+            title: "Look at that cat pic!".into(),
+        },
+        Article {
+            title: "Hello World!".into(),
+        },
+      ]
+  });
+  let hide = tpl.render(&Conditional { secret: vec![] });
+
+  assert_eq!(show, "Hello! This is a secret!");
+  assert_eq!(hide, "Hello!");
+}
+
+#[test]
+fn can_render_negations_from_vec() {
+  #[derive(Content)]
+  struct Article {
+      title: String,
+  }
+
+  #[derive(Content)]
+  struct Conditional {
+      secret: Vec<Article>,
+  }
+
+  let tpl = Template::new("Hello!{{^secret}} This is a secret!{{/secret}}").unwrap();
+
+  let hide = tpl.render(&Conditional {
+      secret: vec![
+        Article {
+            title: "How is Ramhorns this fast?".into(),
+        },
+        Article {
+            title: "Look at that cat pic!".into(),
+        },
+        Article {
+            title: "Hello World!".into(),
+        },
+      ]
+  });
+  let show = tpl.render(&Conditional { secret: vec![] });
+
+  assert_eq!(show, "Hello! This is a secret!");
+  assert_eq!(hide, "Hello!");
+}
+
+#[test]
 fn can_render_inverse_sections_from_bool() {
     #[derive(Content)]
     struct Conditional {
